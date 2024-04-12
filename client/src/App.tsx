@@ -1,9 +1,15 @@
-import Main from "./components/Main";
+import Header from "./components/Header";
+import UploadFileContainer from "./components/UploadFileContainer";
+import Footer from "./components/Footer";
+import Swiper from "./components/SwiperImages";
 
 function App() {
     return (
         <>
-            <Main/>
+            <Header/>
+            <UploadFileContainer/>
+            <Swiper/>
+            <Footer/>
         </>
     );
 }
