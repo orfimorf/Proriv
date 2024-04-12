@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt  # Импорт библиотеки для ви
 
 # Импорт необходимых библиотек
 import numpy as np
-from keras.src.layers import MaxPooling2D, Flatten, Conv2D
+from keras.src.layers import MaxPooling2D, Flatten, Conv2D, UpSampling2D
 from keras.models import Sequential
 from keras.layers import Dense
 
@@ -11,33 +11,40 @@ from keras.layers import Dense
 height_img = None
 width_img = None
 
-x_train = None
-y_train = None
+fashion_mnist = keras.datasets.fashion_mnist
+(x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
 
-x_test = None
-y_test = None
 
-output = None
+output = 30
 
+x_train = x_train / 255
+x_test = x_test / 255
 
 # Создание модели нейронной сети
-model = Sequential()
-model.add(Conv2D(16, (8, 8), padding='same', activation='relu', input_shape=(height_img, width_img, 3)))
-model.add(MaxPooling2D(4, 4))
-model.add(Conv2D(32, (8, 8), padding='same', activation='relu'))
-model.add(Conv2D(64, (4, 4), padding='same', activation='relu'))
-model.add(Conv2D(128, (2, 2), padding='same', activation='relu'))
-model.add(Flatten())
-model.add(Dense(128, activation='relu'))
-model.add(Dense(output, activation='softmax'))  # Добавление выходного слоя с одним нейроном для регрессии
+input_img = keras.Input(shape=(28, 28, 1))
 
-model.compile(optimizer='adam',
-              loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-              metrics=['accuracy'])
+x = Conv2D(16, (3, 3), activation='relu', padding='same')(input_img)
+x = MaxPooling2D((2, 2), padding='same')(x)
+x = Conv2D(8, (3, 3), activation='relu', padding='same')(x)
+x = MaxPooling2D((2, 2), padding='same')(x)
+x = Conv2D(8, (3, 3), activation='relu', padding='same')(x)
+encoded = MaxPooling2D((2, 2), padding='same')(x)
 
+# at this point the representation is (4, 4, 8) i.e. 128-dimensional
+
+x = Conv2D(8, (3, 3), activation='relu', padding='same')(encoded)
+x = UpSampling2D((2, 2))(x)
+x = Conv2D(8, (3, 3), activation='relu', padding='same')(x)
+x = UpSampling2D((2, 2))(x)
+x = Conv2D(16, (3, 3), activation='relu')(x)
+x = UpSampling2D((2, 2))(x)
+decoded = Conv2D(1, (3, 3), activation='sigmoid', padding='same')(x)
+
+model = keras.Model(input_img, decoded)
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 # Обучение нейронной сети
-history = model.fit(x_train, y_train, epochs=8, batch_size=32, validation_split=0.2)  # Обучение модели на данных
+history = model.fit(x_train, x_train, epochs=8, batch_size=32, validation_split=0.2)  # Обучение модели на данных
 
 # Построение графиков точности и потерь
 plt.figure(figsize=(12, 6))  # Создание фигуры для графиков
@@ -67,6 +74,19 @@ predict = model.predict(x_test)
 
 print(np.argmax(predict[0]))
 print(y_test[0])
+
+plt.figure()
+plt.imshow(predict[0])
+plt.colorbar()
+plt.grid(False)
+plt.show()
+
+plt.figure()
+plt.imshow(x_test[0])
+plt.colorbar()
+plt.grid(False)
+plt.show()
+
 
 test_loss, test_acc = model.evaluate(x_test,  y_test, verbose=2)
 
