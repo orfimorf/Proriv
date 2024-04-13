@@ -50,4 +50,4 @@ def convert_images(input_directory, output_directory, output_format, output_size
 
 
 # Замените 'путь_к_исходной_папке' и 'путь_к_целевой_папке' на соответствующие пути
-convert_images('D:/Робочий стол/train', 'D:/Pyton/Proriv/NeroClop/data_for_incoder', 'JPEG', (1024, 1024))
+convert_images('D:/Робочий стол/train', 'D:/Pyton/Proriv/NeroClop/data_for_incoder_128', 'JPEG', (128, 128))
