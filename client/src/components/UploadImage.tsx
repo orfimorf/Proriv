@@ -19,12 +19,14 @@ const VisuallyHiddenInput = styled('input')({
 
 export default function UploadImage() {
     const [image, setImage] = useState("")
+    const [load, setLoad] = useState<boolean>(true)
+    const [imageDisplay, setImageDisplay] = useState<string>('')
 
     const handleUpload = (e: any) => {
         if (e.target.files && e.target.files[0] && e.target.files[0].type == "image/jpeg") {
             setImage(e.target.files[0])
-        } else {
-            alert("Не тот тип файла, нужен jpg")
+            setImageDisplay(URL.createObjectURL(e.target.files[0]))
+            setLoad(false)
         }
     }
 
@@ -34,8 +36,6 @@ export default function UploadImage() {
             try {
                 const formData = new FormData()
                 formData.append('image', image)
-
-
                 museum.sendImageForSearch(formData)
 
             } catch (e) {
@@ -46,22 +46,26 @@ export default function UploadImage() {
 
     return (
         <>
-            <Button
-                component="label"
-                role={undefined}
-                variant="contained"
-                tabIndex={-1}
-                startIcon={<CloudUploadIcon/>}
-            >
-                Загрузить картинку
-                <VisuallyHiddenInput type="file"
-                                     onChange={handleUpload}/>
-            </Button>
+            <img className="h-28" src={imageDisplay}  alt={"Загруженная картинка"}/>
+            {load ?
+                <Button
+                    component="label"
+                    role={undefined}
+                    variant="contained"
+                    tabIndex={-1}
+                    startIcon={<CloudUploadIcon/>}
+                >
+                    Загрузить картинку
+                    <VisuallyHiddenInput type="file"
+                                         onChange={handleUpload}/>
+                </Button>
+                :
+                <>
+                </>
+            }
+
             <div className="my-3">
-                <Button variant="outlined" onClick={sendImage}>Поиск</Button>
-            </div>
-            <div className="">
-                <SwiperImages/>
+                <Button disabled={load} variant="outlined" onClick={sendImage}>Поиск</Button>
             </div>
         </>
     );

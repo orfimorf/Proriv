@@ -2,7 +2,7 @@ import React from 'react';
 
 const OkIcon = () => {
     return (
-        <div className='cursor-pointer'>
+        <a className='cursor-pointer' target="_blank" href="https://ok.ru/mkrf/">
             <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_34_7384)">
                     <path
@@ -22,7 +22,7 @@ const OkIcon = () => {
                 </defs>
             </svg>
 
-        </div>
+        </a>
     );
 };
 
