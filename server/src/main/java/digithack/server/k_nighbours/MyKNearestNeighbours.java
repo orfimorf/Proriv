@@ -1,6 +1,6 @@
 package digithack.server.k_nighbours;
 
-import digithack.server.models.ExhibitModel;
+import digithack.server.models.ImageModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,16 +9,16 @@ import java.util.List;
 
 @Component
 public class MyKNearestNeighbours {
-    private final List<ExhibitModel> exhibits;
+    private final List<ImageModel> images;
 
     @Autowired
-    public MyKNearestNeighbours(List<ExhibitModel> exhibits) {
-        this.exhibits = exhibits;
+    public MyKNearestNeighbours(List<ImageModel> images) {
+        this.images = images;
     }
 
-    public List<ExhibitModel> findKNearestNeighbours(ExhibitModel exhibit, int k) {
-        return exhibits.stream()
-                .sorted(Comparator.comparing(o -> ExhibitModel.getDistance(o, exhibit)))
+    public List<ImageModel> findKNearestNeighbours(ImageModel images, int k) {
+        return this.images.stream()
+                .sorted(Comparator.comparing(o -> ImageModel.getDistance(o, images)))
                 .limit(k)
                 .toList();
     }

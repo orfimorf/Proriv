@@ -24,13 +24,13 @@ public class ExhibitController {
         return ResponseEntity.ok(exhibit);
     }
 
-    @GetMapping("getById")
+    @GetMapping("/getById")
     public ResponseEntity<Exhibit> getById(@RequestParam Long id) {
         var exhibit = exhibitRepo.findById(id).orElse(null);
         return ResponseEntity.ok(exhibit);
     }
 
-    @GetMapping("getByIds")
+    @GetMapping("/getByIds")
     public ResponseEntity<Iterable<Exhibit>> getByIds(@RequestParam List<Long> ids) {
         var exhibits = exhibitRepo.findAllById(ids);
         return ResponseEntity.ok(exhibits);

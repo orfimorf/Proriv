@@ -1,8 +1,8 @@
 package digithack.server.configurations;
 
-import digithack.server.entities.Exhibit;
-import digithack.server.models.ExhibitModel;
-import digithack.server.repositories.ExhibitRepository;
+import digithack.server.entities.Image;
+import digithack.server.models.ImageModel;
+import digithack.server.repositories.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,12 +15,12 @@ public class DataBaseConfiguration {
 
     @Bean
     @Autowired
-    public List<ExhibitModel> getExhibitModels(ExhibitRepository exhibitRepository) {
-        var exhibits = exhibitRepository.findAll();
-        List<ExhibitModel> exhibitModels = new ArrayList<>();
-        for (Exhibit exhibit : exhibits) {
-            exhibitModels.add(new ExhibitModel(exhibit));
+    public List<ImageModel> getImageModels(ImageRepository imageRepository) {
+        var images = imageRepository.findAll();
+        List<ImageModel> imageModels = new ArrayList<>();
+        for (Image image : images) {
+            imageModels.add(new ImageModel(image));
         }
-        return exhibitModels;
+        return imageModels;
     }
 }
