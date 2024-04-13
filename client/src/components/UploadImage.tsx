@@ -36,10 +36,10 @@ export default function UploadImage() {
 
             const museum = new MuseumStore()
 
-            museum.create(formData)
+            museum.sendImageForSearch(formData)
 
         } catch (e) {
-            console.log(e)
+            alert("Ошибка",e)
         }
     }
 

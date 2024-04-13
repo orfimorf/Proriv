@@ -7,14 +7,7 @@ export default class MuseumStore {
         this.image = ''
     }
 
-
-    async sendImageForSearch(image:string){
-        const response = await MuseumService.sendImageForSearch(image)
-
-        return response
-    }
-
-    async create(formData: FormData){
-        await MuseumService.create(formData)
+    async sendImageForSearch(formData: FormData){
+        await MuseumService.postImageForSearch(formData)
     }
 }
