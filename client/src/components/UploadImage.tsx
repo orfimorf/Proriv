@@ -2,9 +2,9 @@ import * as React from 'react';
 import {styled} from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import {useState} from "react";
-import MuseumStore from "../store/MuseumStore";
+import {useContext, useState} from "react";
 import SwiperImages from "./SwiperImages";
+import {Context} from "../index";
 
 const VisuallyHiddenInput = styled('input')({
     clipPath: 'inset(50%)',
@@ -28,18 +28,19 @@ export default function UploadImage() {
         }
     }
 
-
+    const museum = useContext(Context)
     const sendImage = () => {
-        try {
-            const formData = new FormData()
-            formData.append('image', image)
+        if (museum) {
+            try {
+                const formData = new FormData()
+                formData.append('image', image)
 
-            const museum = new MuseumStore()
 
-            museum.sendImageForSearch(formData)
+                museum.sendImageForSearch(formData)
 
-        } catch (e) {
-            console.log(e)
+            } catch (e) {
+                console.log(e)
+            }
         }
     }
 
