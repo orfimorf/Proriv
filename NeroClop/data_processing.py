@@ -48,6 +48,6 @@ def convert_images(input_directory, output_directory, output_format, output_size
     #     json.dump(data, file)
 
 
-
 # Замените 'путь_к_исходной_папке' и 'путь_к_целевой_папке' на соответствующие пути
-convert_images('D:/Робочий стол/train', 'D:/Pyton/Proriv/NeroClop/data_for_incoder_128', 'JPEG', (128, 128))
+
+convert_images('D:/Робочий стол/train', 'D:/Pyton/Proriv/NeroClop/data_for_incoder_64', 'JPEG', (64, 64))

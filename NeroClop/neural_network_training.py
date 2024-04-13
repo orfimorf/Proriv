@@ -1,18 +1,14 @@
 import os
 
-import keras
-import matplotlib.pyplot as plt  # Импорт библиотеки для визуализации данных
-
-# Импорт необходимых библиотек
-import numpy as np
 from PIL import Image
-from keras import Input
+import numpy as np
+import matplotlib.pyplot as plt
+from keras.datasets import mnist
+import keras
+from keras.layers import Dense, Flatten, Reshape, Input
+from keras.src.layers import Conv2D, MaxPooling2D, Conv2DTranspose
 
-from keras.src.layers import MaxPooling2D, Flatten, Conv2D, UpSampling2D, Reshape, Conv2DTranspose
-from keras.models import Sequential
-from keras.layers import Dense
-
-directory = 'D:/Pyton/Proriv/NeroClop/data_for_incoder_128'
+directory = 'D:/Pyton/Proriv/NeroClop/data_for_incoder_32'
 
 
 def progress_bar(total, actual):
@@ -28,7 +24,9 @@ def progress_bar(total, actual):
 
     print('\r' + l, end='')
 
+
 # Создание списка для хранения массивов изображений
+
 x_train = []
 
 i = 0
@@ -45,50 +43,56 @@ for filename in os.listdir(directory):
 
     i += 1
 
-    progress_bar(500, i)
+    progress_bar(20_000, i)
 
-    if i >= 500:
-        break
+    # if i >= 5000:
+    #     break
 
 # Преобразование списка в массив NumPy
 x_train = np.array(x_train)
 
+plt.imshow(x_train[100])
+plt.show()
+
 x_train = x_train / 255
 
-input_img = Input(shape=(128, 128, 3))
-x = Conv2D(filters=8, kernel_size=(8, 8), activation='elu', padding='same')(input_img)
+input_img = Input(shape=(32, 32, 3))
+x = Conv2D(filters=32, kernel_size=(4, 4), activation='relu', padding='same')(input_img)
 x = MaxPooling2D(pool_size=(2, 2))(x)
-x = Conv2D(filters=16, kernel_size=(8, 8), activation='elu', padding='same')(x)
-# x = MaxPooling2D(pool_size=(2, 2))(x)
-# x = Conv2D(filters=32, kernel_size=(8, 8), activation='elu', padding='same')(x)
-# x = Conv2D(filters=64, kernel_size=(8, 8), activation='elu', padding='same')(x)
+x = Conv2D(filters=32, kernel_size=(4, 4), activation='relu', padding='same')(x)
 x = MaxPooling2D(pool_size=(2, 2))(x)
 x = Flatten()(x)
-encoded = Dense(48, activation='linear')(x)
+x = Dense(256, activation='relu')(x)
+x = Dense(256, activation='relu')(x)
+encoded = Dense(192, activation='linear')(x)
 
-input_enc = Input(shape=(48,))
-d = Reshape((4, 4, 3))(input_enc)
-d = Conv2DTranspose(filters=16, kernel_size=(12, 12), strides=2, activation='elu', padding='same')(d)
-d = Conv2DTranspose(filters=8, kernel_size=(12, 12), strides=2, activation='elu', padding='same')(d)
-# d = Conv2DTranspose(filters=16, kernel_size=(16, 16), strides=2, activation='elu', padding='same')(d)
-d = Conv2DTranspose(filters=4, kernel_size=(12, 12), strides=2, activation='elu', padding='same')(d)
+input_enc = Input(shape=(192,))
+d = Reshape((8, 8, 3))(input_enc)
+d = Conv2DTranspose(filters=32, kernel_size=(4, 4), strides=2, activation='relu', padding='same')(d)
+d = Conv2DTranspose(filters=16, kernel_size=(4, 4), strides=2, activation='relu', padding='same')(d)
 d = Flatten()(d)
-d = Dense(128 * 128 * 3, activation='sigmoid')(d)
-decoded = Reshape((128, 128, 3))(d)
+d = Dense(4048, activation='relu')(d)
+d = Dense(32 * 32 * 3, activation='sigmoid')(d)
+decoded = Reshape((32, 32, 3))(d)
 
 encoder = keras.Model(input_img, encoded, name="encoder")
 decoder = keras.Model(input_enc, decoded, name="decoder")
 autoencoder = keras.Model(input_img, decoder(encoder(input_img)), name="autoencoder")
-autoencoder.compile(optimizer='adam', loss='mean_squared_error')
+autoencoder.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
 
 autoencoder.fit(x_train, x_train,
-                epochs=5,
-                batch_size=32,
+                epochs=10,
+                batch_size=64,
+                validation_split=0.2,
                 shuffle=True)
 
-encoder.save("D:/Pyton/Proriv/NeroClop/model/encoder_v2")
-decoder.save("D:/Pyton/Proriv/NeroClop/model/decoder_v2")
-autoencoder.save("D:/Pyton/Proriv/NeroClop/model/autoencoder_v2")
+encoder.save("D:/Pyton/Proriv/NeroClop/model/encoder_v4.h5")
+decoder.save("D:/Pyton/Proriv/NeroClop/model/decoder_v4.h5")
+autoencoder.save("D:/Pyton/Proriv/NeroClop/model/autoencoder_v4.h5")
 
+img = autoencoder.predict(np.expand_dims(x_train[100], axis=0))
+
+plt.imshow(img.squeeze(), cmap='gray')
+plt.show()
 
 
