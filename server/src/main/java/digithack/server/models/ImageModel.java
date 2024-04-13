@@ -1,5 +1,6 @@
 package digithack.server.models;
 
+import digithack.server.entities.Exhibit;
 import digithack.server.entities.Image;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +14,11 @@ public class ImageModel {
 
     private double[] coords;
 
+    private Exhibit exhibit;
+
     public ImageModel(Image image) {
+        this.imageName = image.getImageName();
+        this.exhibit = image.getExhibit();
         this.coords = parseCoords(image.getCoords());
     }
 

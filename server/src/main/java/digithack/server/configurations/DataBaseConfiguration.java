@@ -12,7 +12,6 @@ import java.util.List;
 
 @Configuration
 public class DataBaseConfiguration {
-
     @Bean
     @Autowired
     public List<ImageModel> getImageModels(ImageRepository imageRepository) {
