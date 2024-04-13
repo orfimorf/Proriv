@@ -1,4 +1,3 @@
-import {$host} from "../http";
 import MuseumService from "../services/MuseumService";
 
 export default class MuseumStore {
@@ -13,5 +12,9 @@ export default class MuseumStore {
         const response = await MuseumService.sendImageForSearch(image)
 
         return response
+    }
+
+    async create(formData: FormData){
+        await MuseumService.create(formData)
     }
 }

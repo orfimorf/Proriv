@@ -30,8 +30,17 @@ export default function UploadImage() {
 
 
     const sendImage = () => {
-        console.log(image)
-        return MuseumStore
+        try {
+            const formData = new FormData()
+            formData.append('image', image)
+
+            const museum = new MuseumStore()
+
+            museum.create(formData)
+
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     return (
