@@ -3,7 +3,6 @@ import {styled} from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import {useContext, useState} from "react";
-import SwiperImages from "./SwiperImages";
 import {Context} from "../index";
 
 const VisuallyHiddenInput = styled('input')({
@@ -23,7 +22,7 @@ export default function UploadImage() {
     const [imageDisplay, setImageDisplay] = useState<string>('')
 
     const handleUpload = (e: any) => {
-        if (e.target.files && e.target.files[0] && e.target.files[0].type == "image/jpeg") {
+        if (e.target.files && e.target.files[0]) {
             setImage(e.target.files[0])
             setImageDisplay(URL.createObjectURL(e.target.files[0]))
             setLoad(false)
@@ -31,12 +30,14 @@ export default function UploadImage() {
     }
 
     const museum = useContext(Context)
-    const sendImage = () => {
+    const sendImage = async () => {
         if (museum) {
             try {
                 const formData = new FormData()
                 formData.append('image', image)
-                museum.sendImageForSearch(formData)
+                const response = await museum.sendImageForSearch(formData)
+
+                museum.setMuseumItems(response)
 
             } catch (e) {
                 console.log(e)

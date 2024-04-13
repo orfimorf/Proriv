@@ -1,6 +1,4 @@
 import React from 'react';
-import TelegramIcon from '@mui/icons-material/Telegram';
-import Button from "@mui/material/Button";
 import VkIcon from "../icons/VkIcon";
 import OkIcon from "../icons/OkIcon";
 import TgIcon from "../icons/TgIcon";
