@@ -18,6 +18,8 @@ public class Exhibit {
 
     private String exhibitGroup;
 
+    private String coords;
+
     @OneToMany
     private List<Image> imgPaths;
 }
