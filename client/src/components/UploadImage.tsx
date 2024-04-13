@@ -39,7 +39,7 @@ export default function UploadImage() {
             museum.sendImageForSearch(formData)
 
         } catch (e) {
-            alert("Ошибка",e)
+            console.log(e)
         }
     }
 
