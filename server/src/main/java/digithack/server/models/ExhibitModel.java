@@ -22,12 +22,14 @@ public class ExhibitModel {
 
     private byte[] image;
 
-    public ExhibitModel(ImageModel imageModel) throws IOException {
-        this.exhibitName = imageModel.getExhibit().getExhibitName();
-        this.exhibitDescription = imageModel.getExhibit().getExhibitDescription();
-        this.exhibitGroup = imageModel.getExhibit().getExhibitGroup();
+    public ExhibitModel(
+            ImageModel imageModel, Long exhibitId, String exhibitName, String exhibitDescription, String exhibitGroup
+    ) throws IOException {
+        this.exhibitName = exhibitName;
+        this.exhibitDescription = exhibitDescription;
+        this.exhibitGroup = exhibitGroup;
 
-        Resource resource = new ClassPathResource("static/images/" + imageModel);
+        Resource resource = new ClassPathResource("static/images/" + imageModel.getImageName());
         Path path = Paths.get(resource.getURI());
 
         this.image = Files.readAllBytes(path);

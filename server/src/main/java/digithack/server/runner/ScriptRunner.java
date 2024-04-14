@@ -27,7 +27,7 @@ public class ScriptRunner {
     }
 
     private String getPythonRes(Path imagePath) throws IOException, InterruptedException {
-        String scriptPath = "C:\\Users\\Daniil\\Desktop\\haha_2\\hihi\\src\\main\\resources\\scripts\\neural.py";
+        String scriptPath = "C:\\Users\\Daniil\\Desktop\\digit_hack\\server\\src\\main\\resources\\scripts\\neural.py";
 
         ProcessBuilder processBuilder = new ProcessBuilder("python", scriptPath);
         Process demoProc = processBuilder.start();
@@ -36,11 +36,18 @@ public class ScriptRunner {
         PrintWriter writer = new PrintWriter(new OutputStreamWriter(outputStream));
         writer.println(imagePath);
         writer.flush();
-
         demoProc.waitFor();
 
+        Thread.sleep(15000);
         BufferedReader reader = new BufferedReader(new InputStreamReader(demoProc.getInputStream()));
+        String result1 = reader.readLine();
+        String result2 = reader.readLine();
 
-        return reader.readLine();
+
+
+        //System.out.println(result1);
+        //System.out.println(result2);
+
+        return result1;
     }
 }

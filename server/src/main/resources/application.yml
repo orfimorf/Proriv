@@ -2,5 +2,12 @@ spring:
   application:
     name: server
   datasource:
-    generate-unique-name: false
-    name: digit-server
+    url: jdbc:postgresql://localhost:5432/minkult
+    username: postgres
+    password: Ural-Revda23
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
